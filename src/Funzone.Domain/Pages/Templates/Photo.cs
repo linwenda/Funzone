@@ -1,6 +1,6 @@
 ﻿namespace Funzone.Domain.Pages.Templates
 {
-    public class BoardTemplate : IPageTemplate
+    public class Photo : IPageTemplate
     {
     }
 }

@@ -3,10 +3,10 @@
     public enum PageType
     {
         Untitled,
+        Zone,
         Article,
         Board,
-        Collection,
-        Note,
+        Folder,
         Photo
     }
 }
