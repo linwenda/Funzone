@@ -13,9 +13,6 @@ namespace Funzone.Infrastructure.Domain
             builder.RegisterType<UserChecker>()
                 .As<IUserChecker>();
 
-            builder.RegisterType<ZoneCounter>()
-                .As<IZoneCounter>();
-
             return builder;
         }
     }

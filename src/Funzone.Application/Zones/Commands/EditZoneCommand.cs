@@ -1,19 +1,15 @@
 ﻿using System;
 using Funzone.Application.Configuration.Commands;
+using Funzone.Domain.SharedKernel;
 
 namespace Funzone.Application.Zones.Commands
 {
     public class EditZoneCommand : ICommand<bool>
     {
-        public EditZoneCommand(Guid zoneId, string description, string avatarUrl)
-        {
-            ZoneId = zoneId;
-            Description = description;
-            AvatarUrl = avatarUrl;
-        }
-
-        public Guid ZoneId { get; }
-        public string Description { get; }
-        public string AvatarUrl { get; }
+        public Guid ZoneId { get; set; }
+        public string Title { get; set; }
+        public string Color { get; set; }
+        public string Icon { get; set; }
+        public Visibility Visibility { get; set; }
     }
 }

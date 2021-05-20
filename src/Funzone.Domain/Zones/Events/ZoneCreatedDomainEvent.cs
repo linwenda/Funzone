@@ -5,11 +5,18 @@ namespace Funzone.Domain.Zones.Events
 {
     public class ZoneCreatedDomainEvent : DomainEventBase
     {
-        public Zone Zone { get; }
+        public ZoneId ZoneId { get; }
+        public UserId CreatorId { get; }
+        public string Title { get; }
 
-        public ZoneCreatedDomainEvent(Zone zone)
+        public ZoneCreatedDomainEvent(
+            ZoneId zoneId,
+            UserId creatorId,
+            string title)
         {
-            Zone = zone;
+            ZoneId = zoneId;
+            CreatorId = creatorId;
+            Title = title;
         }
     }
 }

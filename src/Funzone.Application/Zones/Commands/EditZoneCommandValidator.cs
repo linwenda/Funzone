@@ -2,9 +2,9 @@
 
 namespace Funzone.Application.Zones.Commands
 {
-    public class CreateZoneCommandValidator : AbstractValidator<CreateZoneCommand>
+    public class EditZoneCommandValidator : AbstractValidator<EditZoneCommand>
     {
-        public CreateZoneCommandValidator()
+        public EditZoneCommandValidator()
         {
             RuleFor(v => v.Title).NotNull().NotEmpty().MaximumLength(20);
             RuleFor(v => v.Color).MaximumLength(20);
