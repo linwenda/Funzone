@@ -1,20 +1,22 @@
 ﻿using System;
 using Funzone.Domain.Pages.Events;
+using Funzone.Domain.Pages.Rules;
 using Funzone.Domain.SeedWork;
 using Funzone.Domain.SharedKernel;
 using Funzone.Domain.Users;
+using Funzone.Domain.Zones;
 
 namespace Funzone.Domain.Pages
 {
-    public class Page : Entity, IAggregateRoot
+    public class Page : AggregateRoot
     {
-        public PageId Id { get; private set; }
-
-        private PageId _parentId;
+        private ZoneId _zoneId;
+        private Guid? _parentId;
         private UserId _authorId;
         private DateTime _createdTime;
         private string _title;
         private string _body;
+        private DateTime? _editedTime;
         private bool _isDeleted;
 
         private Page()
@@ -22,28 +24,80 @@ namespace Funzone.Domain.Pages
             //Only for EF
         }
 
-        public Page(
-            PageId parentId,
-            UserId authorId, 
-            string title, 
-            string body)
+        protected override void Apply(IDomainEvent @event)
         {
-            _parentId = parentId;
-            _authorId = authorId;
-            _title = title;
-            _body = body;
-            _createdTime = SystemClock.Now;
-
-            AddDomainEvent(new PageCreatedDomainEvent(Id, 
-                _parentId, 
-                _authorId, 
-                _title, 
-                _createdTime));
+            When((dynamic) @event);
         }
 
-        public Page NewPage(UserId currentUserId,string title,string body)
+        public static Page Create(
+            ZoneId zoneId,
+            Guid? parentId,
+            UserId authorId,
+            string title,
+            string body)
         {
-            return new Page(Id, currentUserId, title, body);
+            var page = new Page();
+
+            var pageCreatedDomainEvent = new PageCreatedDomainEvent(
+                zoneId,
+                Guid.NewGuid(),
+                parentId,
+                authorId,
+                title,
+                body,
+                DateTime.Now);
+
+            page.Apply(pageCreatedDomainEvent);
+            page.AddDomainEvent(pageCreatedDomainEvent);
+
+            return page;
+        }
+
+        public void Delete(UserId deleteUserId)
+        {
+            CheckRule(new PageCanBeDeletedOnlyByAuthorRule(_authorId, deleteUserId));
+            
+            var pageDeletedDomainEvent = new PageDeletedDomainEvent(Id);
+            
+            Apply(pageDeletedDomainEvent);
+            AddDomainEvent(pageDeletedDomainEvent);
+        }
+
+        public void Edit(UserId editorId, string title, string body)
+        {
+            CheckRule(new PageCanBeEditedOnlyByAuthorRule(_authorId, editorId));
+
+            var pageEditedDomainEvent = new PageEditedDomainEvent(title, body, SystemClock.Now);
+
+            Apply(pageEditedDomainEvent);
+            AddDomainEvent(pageEditedDomainEvent);
+        }
+        
+        private void When(PageCreatedDomainEvent @event)
+        {
+            Id = @event.PageId;
+            _parentId = @event.ParentPageId;
+            _title = @event.Title;
+            _body = @event.Body;
+            _authorId = @event.AuthorId;
+            _createdTime = @event.CreatedTime;
+        }
+
+        private void When(PageDeletedDomainEvent @event)
+        {
+            _isDeleted = true;
+        }
+
+        private void When(PageEditedDomainEvent @event)
+        {
+            _title = @event.Title;
+            _body = @event.Body;
+            _editedTime = @event.EditedTime;
+        }
+
+        private void When(PageMovedDomainEvent @event)
+        {
+            _parentId = @event.ParentPageId;
         }
     }
 }

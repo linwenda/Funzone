@@ -1,18 +1,15 @@
-﻿using Funzone.Domain.SeedWork;
-using Funzone.Domain.Users;
+﻿using System;
+using Funzone.Domain.SeedWork;
 
 namespace Funzone.Domain.Pages.Events
 {
     public class PageDeletedDomainEvent : DomainEventBase
     {
-        public PageId PageId { get; }
-        public UserId AuthorId { get; }
+        public Guid PageId { get; }
 
-        public PageDeletedDomainEvent(
-            PageId pageId, UserId authorId)
+        public PageDeletedDomainEvent(Guid pageId)
         {
             PageId = pageId;
-            AuthorId = authorId;
         }
     }
 }

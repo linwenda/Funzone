@@ -1,29 +1,36 @@
 ﻿using System;
 using Funzone.Domain.SeedWork;
 using Funzone.Domain.Users;
+using Funzone.Domain.Zones;
 
 namespace Funzone.Domain.Pages.Events
 {
     public class PageCreatedDomainEvent : DomainEventBase
     {
         public PageCreatedDomainEvent(
-            PageId pageId,
-            PageId parentPageId,
+            ZoneId zoneId,
+            Guid pageId,
+            Guid? parentPageId,
             UserId authorId,
             string title,
+            string body,
             DateTime createdTime)
         {
+            ZoneId = zoneId;
             PageId = pageId;
             AuthorId = authorId;
             Title = title;
+            Body = body;
             CreatedTime = createdTime;
             ParentPageId = parentPageId;
         }
 
-        public PageId PageId { get; }
-        public PageId ParentPageId { get; }
+        public ZoneId ZoneId { get; }
+        public Guid PageId { get; }
+        public Guid? ParentPageId { get; }
         public UserId AuthorId { get; }
         public string Title { get; }
+        public string Body { get; }
         public DateTime CreatedTime { get; }
     }
 }

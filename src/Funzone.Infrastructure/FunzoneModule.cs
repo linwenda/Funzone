@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Funzone.Application.Configuration;
 using Funzone.Infrastructure.DataAccess;
-using Funzone.Infrastructure.Domain;
 using Funzone.Infrastructure.Logging;
 using Funzone.Infrastructure.Processing;
 using Serilog;
@@ -30,7 +29,6 @@ namespace Funzone.Infrastructure
                 .RegisterLogging(_logger)
                 .RegisterProcessing(_executionContextAccessor)
                 .RegisterDatabase(_connectionString)
-                .RegisterDomainService()
                 .RegisterMediator();
         }
     }

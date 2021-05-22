@@ -2,8 +2,11 @@
 using Autofac;
 using Autofac.Core;
 using Funzone.Application.Configuration.Data;
+using Funzone.Application.Users;
+using Funzone.Domain.SeedWork;
+using Funzone.Domain.Users;
+using Funzone.Infrastructure.AggregateStore;
 using Funzone.Infrastructure.DataAccess.Repositories;
-using Funzone.Infrastructure.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -36,6 +39,14 @@ namespace Funzone.Infrastructure.DataAccess
             builder.RegisterType<MsSqlConnectionFactory>()
                 .As<ISqlConnectionFactory>()
                 .WithParameter("connectionString", connectionString)
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<SqlStreamAggregateStore>()
+                .As<IAggregateStore>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<UserChecker>()
+                .As<IUserChecker>()
                 .InstancePerLifetimeScope();
 
             return builder;
