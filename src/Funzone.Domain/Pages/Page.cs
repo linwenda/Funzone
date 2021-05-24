@@ -11,7 +11,7 @@ namespace Funzone.Domain.Pages
     public class Page : AggregateRoot
     {
         private ZoneId _zoneId;
-        private Guid? _parentId;
+        private PageId _parentId;
         private UserId _authorId;
         private DateTime _createdTime;
         private string _title;
@@ -56,9 +56,9 @@ namespace Funzone.Domain.Pages
         public void Delete(UserId deleteUserId)
         {
             CheckRule(new PageCanBeDeletedOnlyByAuthorRule(_authorId, deleteUserId));
-            
+
             var pageDeletedDomainEvent = new PageDeletedDomainEvent(Id);
-            
+
             Apply(pageDeletedDomainEvent);
             AddDomainEvent(pageDeletedDomainEvent);
         }
@@ -72,11 +72,11 @@ namespace Funzone.Domain.Pages
             Apply(pageEditedDomainEvent);
             AddDomainEvent(pageEditedDomainEvent);
         }
-        
+
         private void When(PageCreatedDomainEvent @event)
         {
             Id = @event.PageId;
-            _parentId = @event.ParentPageId;
+            _parentId = @event.ParentPageId.HasValue ? new PageId(@event.ParentPageId.Value) : null;
             _title = @event.Title;
             _body = @event.Body;
             _authorId = @event.AuthorId;
@@ -97,7 +97,7 @@ namespace Funzone.Domain.Pages
 
         private void When(PageMovedDomainEvent @event)
         {
-            _parentId = @event.ParentPageId;
+            _parentId = @event.ParentPageId.HasValue ? new PageId(@event.ParentPageId.Value) : null;
         }
     }
 }
