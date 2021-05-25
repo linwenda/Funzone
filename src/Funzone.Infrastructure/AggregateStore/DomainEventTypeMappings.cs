@@ -13,8 +13,7 @@ namespace Funzone.Infrastructure.AggregateStore
             Dictionary = new Dictionary<string, Type>
             {
                 {"PageCreated", typeof(PageCreatedDomainEvent)},
-                {"PageEdited", typeof(PageEditedDomainEvent)},
-                {"PageDeleted", typeof(PageDeletedDomainEvent)},
+                {"PageDraftSaved", typeof(PageDraftSavedDomainEvent)},
                 {"PageMoved", typeof(PageMovedDomainEvent)}
             };
         }

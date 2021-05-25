@@ -3,6 +3,7 @@ using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using Funzone.Application.Configuration.Data;
+using Funzone.Domain.SeedWork;
 using Funzone.Domain.Users;
 using Funzone.Domain.Zones;
 using Funzone.Infrastructure.DataAccess.EntityConfigurations;
@@ -17,7 +18,6 @@ namespace Funzone.Infrastructure.DataAccess
     public class FunzoneDbContext : DbContext, ITransactionContext
     {
         private readonly IMediator _mediator;
-
         private IDbContextTransaction _currentTransaction;
 
         public FunzoneDbContext(DbContextOptions options, IMediator mediator)

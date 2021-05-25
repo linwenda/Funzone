@@ -14,7 +14,8 @@ namespace Funzone.Domain.Pages.Events
             UserId authorId,
             string title,
             string body,
-            DateTime createdTime)
+            DateTime createdTime,
+            PageStatus status)
         {
             ZoneId = zoneId;
             PageId = pageId;
@@ -22,6 +23,7 @@ namespace Funzone.Domain.Pages.Events
             Title = title;
             Body = body;
             CreatedTime = createdTime;
+            Status = status;
             ParentPageId = parentPageId;
         }
 
@@ -32,5 +34,6 @@ namespace Funzone.Domain.Pages.Events
         public string Title { get; }
         public string Body { get; }
         public DateTime CreatedTime { get; }
+        public PageStatus Status { get; }
     }
 }

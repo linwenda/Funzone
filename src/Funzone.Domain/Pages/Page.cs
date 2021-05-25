@@ -16,8 +16,8 @@ namespace Funzone.Domain.Pages
         private DateTime _createdTime;
         private string _title;
         private string _body;
+        private PageStatus _status;
         private DateTime? _editedTime;
-        private bool _isDeleted;
 
         private Page()
         {
@@ -45,7 +45,8 @@ namespace Funzone.Domain.Pages
                 authorId,
                 title,
                 body,
-                DateTime.Now);
+                DateTime.Now,
+                PageStatus.Draft);
 
             page.Apply(pageCreatedDomainEvent);
             page.AddDomainEvent(pageCreatedDomainEvent);
@@ -53,24 +54,26 @@ namespace Funzone.Domain.Pages
             return page;
         }
 
-        public void Delete(UserId deleteUserId)
+        public void SaveDraft(UserId userId, string title, string body)
         {
-            CheckRule(new PageCanBeDeletedOnlyByAuthorRule(_authorId, deleteUserId));
+            CheckRule(new PageDraftCanBeSavedOnlyByAuthorRule(_authorId, userId));
 
-            var pageDeletedDomainEvent = new PageDeletedDomainEvent(Id);
+            var pageDraftSavedDomain = new PageDraftSavedDomainEvent(title, body, PageStatus.Draft);
 
-            Apply(pageDeletedDomainEvent);
-            AddDomainEvent(pageDeletedDomainEvent);
+            Apply(pageDraftSavedDomain);
+            AddDomainEvent(pageDraftSavedDomain);
         }
 
-        public void Edit(UserId editorId, string title, string body)
+        public void Publish(UserId userId)
         {
-            CheckRule(new PageCanBeEditedOnlyByAuthorRule(_authorId, editorId));
+            CheckRule(new PageCanBePublishedOnlyByAuthorRule(_authorId, userId));
 
-            var pageEditedDomainEvent = new PageEditedDomainEvent(title, body, SystemClock.Now);
+            _status = PageStatus.Published;
+            
+            var pagePublishedDomainEvent = new PagePublishedDomainEvent(_status);
 
-            Apply(pageEditedDomainEvent);
-            AddDomainEvent(pageEditedDomainEvent);
+            Apply(pagePublishedDomainEvent);
+            AddDomainEvent(pagePublishedDomainEvent);
         }
 
         private void When(PageCreatedDomainEvent @event)
@@ -81,20 +84,16 @@ namespace Funzone.Domain.Pages
             _body = @event.Body;
             _authorId = @event.AuthorId;
             _createdTime = @event.CreatedTime;
+            _status = @event.Status;
         }
 
-        private void When(PageDeletedDomainEvent @event)
-        {
-            _isDeleted = true;
-        }
-
-        private void When(PageEditedDomainEvent @event)
+        private void When(PageDraftSavedDomainEvent @event)
         {
             _title = @event.Title;
             _body = @event.Body;
-            _editedTime = @event.EditedTime;
+            _status = @event.Status;
         }
-
+        
         private void When(PageMovedDomainEvent @event)
         {
             _parentId = @event.ParentPageId.HasValue ? new PageId(@event.ParentPageId.Value) : null;
