@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Funzone.Domain.SeedWork;
 using Funzone.Infrastructure.DataAccess;
+using Funzone.Infrastructure.DataAccess.EFCore;
 using MediatR;
 
 namespace Funzone.Infrastructure.Processing

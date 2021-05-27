@@ -17,7 +17,7 @@ namespace Funzone.Domain.SeedWork
         {
             _domainEvents ??= new List<IDomainEvent>();
 
-            this._domainEvents.Add(domainEvent);
+            _domainEvents.Add(domainEvent);
         }
         
         protected void CheckRule(IBusinessRule rule)

@@ -13,7 +13,7 @@ namespace Funzone.Domain.SeedWork
 
         public static bool operator ==(ValueObject obj1, ValueObject obj2)
         {
-            return obj1?.Equals(obj2) ?? object.Equals(obj2, null);
+            return obj1?.Equals(obj2) ?? Equals(obj2, null);
         }
 
         public static bool operator !=(ValueObject obj1, ValueObject obj2)
@@ -60,17 +60,17 @@ namespace Funzone.Domain.SeedWork
 
         private bool PropertiesAreEqual(object obj, PropertyInfo p)
         {
-            return object.Equals(p.GetValue(this, null), p.GetValue(obj, null));
+            return Equals(p.GetValue(this, null), p.GetValue(obj, null));
         }
 
         private bool FieldsAreEqual(object obj, FieldInfo f)
         {
-            return object.Equals(f.GetValue(this), f.GetValue(obj));
+            return Equals(f.GetValue(this), f.GetValue(obj));
         }
 
         private IEnumerable<PropertyInfo> GetProperties()
         {
-            return this._properties ??= GetType()
+            return _properties ??= GetType()
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .Where(p => p.GetCustomAttribute(typeof(IgnoreMemberAttribute)) == null)
                 .ToList();
@@ -78,7 +78,7 @@ namespace Funzone.Domain.SeedWork
 
         private IEnumerable<FieldInfo> GetFields()
         {
-            return this._fields ??= GetType()
+            return _fields ??= GetType()
                 .GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                 .Where(p => p.GetCustomAttribute(typeof(IgnoreMemberAttribute)) == null)
                 .ToList();

@@ -9,8 +9,8 @@ namespace Funzone.Domain.SeedWork
 
         public DomainEventBase()
         {
-            this.Id = Guid.NewGuid();
-            this.OccurredOn = DateTime.UtcNow;
+            Id = Guid.NewGuid();
+            OccurredOn = DateTime.UtcNow;
         }
     }
 }

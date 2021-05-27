@@ -1,8 +1,6 @@
 ﻿using Autofac;
 using Funzone.Application.Users;
-using Funzone.Application.Zones;
 using Funzone.Domain.Users;
-using Funzone.Domain.Zones;
 
 namespace Funzone.Infrastructure.Domain
 {
@@ -13,8 +11,6 @@ namespace Funzone.Infrastructure.Domain
             builder.RegisterType<UserChecker>()
                 .As<IUserChecker>();
 
-            builder.RegisterType<ZoneCounter>()
-                .As<IZoneCounter>();
 
             return builder;
         }

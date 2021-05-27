@@ -1,6 +1,7 @@
 using System;
 using Autofac.Extensions.DependencyInjection;
 using Funzone.Infrastructure.DataAccess;
+using Funzone.Infrastructure.DataAccess.EFCore;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;

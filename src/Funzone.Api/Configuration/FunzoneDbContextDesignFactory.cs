@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Funzone.Infrastructure.DataAccess;
+using Funzone.Infrastructure.DataAccess.EFCore;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;

@@ -2,8 +2,8 @@
 using Autofac;
 using Autofac.Core;
 using Funzone.Application.Configuration.Data;
-using Funzone.Infrastructure.DataAccess.Repositories;
-using Funzone.Infrastructure.Domain;
+using Funzone.Infrastructure.DataAccess.EFCore;
+using Funzone.Infrastructure.DataAccess.EFCore.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
