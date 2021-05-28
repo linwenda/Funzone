@@ -1,7 +1,6 @@
 ﻿using System;
 using Funzone.Domain.SeedWork;
 using Funzone.Domain.Users.Events;
-using Funzone.Domain.Users.Rules;
 
 namespace Funzone.Domain.Users
 {
@@ -10,7 +9,7 @@ namespace Funzone.Domain.Users
         public UserId Id { get; private set; }
 
         private DateTime _registrationTime;
-        private EmailAddress _email;
+        private EmailAddress _emailAddress;
         private string _passwordHash;
         private string _passwordSalt;
         private string _nickName;
@@ -26,17 +25,20 @@ namespace Funzone.Domain.Users
             string passwordHash,
             string passwordSalt)
         {
-            CheckRule(new EmailMustBeUniqueRule(userChecker, emailAddress));
+            if (!userChecker.IsUnique(emailAddress))
+            {
+                throw new UserDomainException("User with this email already exists.");
+            }
 
             Id = new UserId(Guid.NewGuid());
 
             _registrationTime = DateTime.UtcNow;
-            _email = emailAddress;
+            _emailAddress = emailAddress;
             _passwordHash = passwordHash;
             _passwordSalt = passwordSalt;
             _isActive = true;
             
-            AddDomainEvent(new UserRegisteredDomainEvent(Id,_email));
+            AddDomainEvent(new UserRegisteredDomainEvent(Id,_emailAddress));
         }
 
         public static User RegisterByEmail(

@@ -44,7 +44,7 @@ namespace Funzone.Api.Configuration.Filters
                 context.HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
             }
 
-            else if (context.Exception.GetType() == typeof(BusinessRuleValidationException))
+            else if (context.Exception.GetType().IsAssignableFrom(typeof(DomainException)))
             {
                 context.Result = new ConflictObjectResult(json);
                 context.HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;

@@ -85,13 +85,6 @@ namespace Funzone.IntegrationTests
             await _checkpoint.Reset(_connectionString);
         }
 
-        public static async Task ShouldBrokenRuleAsync<TRule>(Func<Task> action) where TRule : IBusinessRule
-        {
-            var message = $"Expected {typeof(TRule).Name} broken rule";
-            var exception = await Should.ThrowAsync<BusinessRuleValidationException>(action, message);
-            exception.BrokenRule.ShouldBeOfType<TRule>();
-        }
-
         public static async Task Run<T>(Func<T, Task> action)
         {
             using (var scope = Container.BeginLifetimeScope())

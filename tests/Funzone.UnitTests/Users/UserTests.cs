@@ -1,8 +1,8 @@
 ﻿using Funzone.Domain.Users;
 using Funzone.Domain.Users.Events;
-using Funzone.Domain.Users.Rules;
 using NSubstitute;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Funzone.UnitTests.Users
 {
@@ -14,12 +14,14 @@ namespace Funzone.UnitTests.Users
             var userCounter = Substitute.For<IUserChecker>();
             userCounter.IsUnique(Arg.Any<EmailAddress>()).Returns(false);
 
-            ShouldBrokenRule<EmailMustBeUniqueRule>(() =>
+            var ex = Should.Throw<UserDomainException>(() =>
                 User.RegisterByEmail(
                     userCounter,
                     new EmailAddress("test@outlook.com"),
                     "test",
                     "test"));
+            
+            ex.Message.ShouldBe("User with this email already exists.");
         }
 
         [Test]
