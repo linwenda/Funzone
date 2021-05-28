@@ -8,50 +8,53 @@ namespace Funzone.Domain.Users
     public class User : Entity, IAggregateRoot
     {
         public UserId Id { get; private set; }
-        public string UserName { get; private set; }
-        public string PasswordSalt { get; private set; }
-        public string PasswordHash { get; private set; }
-        public EmailAddress EmailAddress { get; private set; }
-        public string NickName { get; private set; }
+
+        private DateTime _registrationTime;
+        private EmailAddress _email;
+        private string _passwordHash;
+        private string _passwordSalt;
+        private string _nickName;
+        private bool _isActive;
 
         private User()
         {
         }
 
         private User(
-            IUserChecker userCounter,
-            string userName,
-            string passwordSalt,
+            IUserChecker userChecker,
+            EmailAddress emailAddress,
             string passwordHash,
-            EmailAddress emailAddress)
+            string passwordSalt)
         {
-            CheckRule(new EmailMustBeUniqueRule(userCounter, emailAddress));
+            CheckRule(new EmailMustBeUniqueRule(userChecker, emailAddress));
 
             Id = new UserId(Guid.NewGuid());
-            UserName = userName;
-            PasswordSalt = passwordSalt;
-            PasswordHash = passwordHash;
-            EmailAddress = emailAddress;
 
-            AddDomainEvent(new UserRegisteredDomainEvent(
-                Id,
-                UserName,
-                EmailAddress.Address,
-                NickName));
+            _registrationTime = DateTime.UtcNow;
+            _email = emailAddress;
+            _passwordHash = passwordHash;
+            _passwordSalt = passwordSalt;
+            _isActive = true;
+            
+            AddDomainEvent(new UserRegisteredDomainEvent(Id,_email));
         }
 
         public static User RegisterByEmail(
             IUserChecker userChecker,
-            EmailAddress emailAddress,
-            string passwordSalt,
-            string passwordHash)
+            EmailAddress email,
+            string passwordHash,
+            string passwordSalt)
         {
             return new User(
                 userChecker,
-                emailAddress.Address,
-                passwordSalt,
-                passwordHash,
-                emailAddress);
+                email, 
+                passwordHash, 
+                passwordSalt);
+        }
+
+        public void EditProfile(string nickName)
+        {
+            _nickName = nickName;
         }
     }
 }

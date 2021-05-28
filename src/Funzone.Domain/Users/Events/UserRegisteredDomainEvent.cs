@@ -4,17 +4,13 @@ namespace Funzone.Domain.Users.Events
 {
     public class UserRegisteredDomainEvent : DomainEventBase
     {
-        public UserRegisteredDomainEvent(UserId userId, string userName, string email, string nickname)
+        public UserRegisteredDomainEvent(UserId userId, EmailAddress email)
         {
             UserId = userId;
-            UserName = userName;
             Email = email;
-            Nickname = nickname;
         }
 
         public UserId UserId { get; }
-        public string UserName { get; }
-        public string Email { get; }
-        public string Nickname { get; }
+        public EmailAddress Email { get; }
     }
 }

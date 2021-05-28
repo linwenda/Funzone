@@ -2,8 +2,10 @@
 using Autofac;
 using Autofac.Core;
 using Funzone.Application.Configuration.Data;
+using Funzone.Domain.SeedWork.EventSourcing;
 using Funzone.Infrastructure.DataAccess.EFCore;
 using Funzone.Infrastructure.DataAccess.EFCore.Repositories;
+using Funzone.Infrastructure.DataAccess.EventSourcing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -36,6 +38,14 @@ namespace Funzone.Infrastructure.DataAccess
             builder.RegisterType<MsSqlConnectionFactory>()
                 .As<ISqlConnectionFactory>()
                 .WithParameter("connectionString", connectionString)
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<AggregateStoreDomainEventsAccessor>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<SqlStreamAggregateStore>()
+                .As<IEventSourcedAggregateStore>()
                 .InstancePerLifetimeScope();
 
             return builder;

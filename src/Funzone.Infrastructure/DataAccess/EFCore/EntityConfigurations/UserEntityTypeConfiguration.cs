@@ -1,4 +1,5 @@
-﻿using Funzone.Domain.Users;
+﻿using System;
+using Funzone.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -12,28 +13,26 @@ namespace Funzone.Infrastructure.DataAccess.EFCore.EntityConfigurations
 
             builder.HasKey(u => u.Id);
 
-            builder.Property(u => u.UserName)
-                .IsRequired()
-                .HasMaxLength(255);
+            builder.Property<DateTime>("_registrationTime").HasColumnName("RegistrationTime");
+            builder.Property<string>("_email").HasColumnName("Email");
+            builder.Property<string>("_passwordHash").HasColumnName("PasswordHash");
+            builder.Property<string>("_passwordSalt").HasColumnName("PasswordHash");
+            builder.Property<string>("_nickName").HasColumnName("NickName");
+            builder.Property<bool>("_isActive").HasColumnName("IsActive");
 
-            builder.Property(u => u.PasswordSalt)
-                .IsRequired()
-                .HasMaxLength(512);
-
-            builder.Property(u => u.PasswordHash)
-                .IsRequired()
-                .HasMaxLength(512);
-
-            builder.OwnsOne(u => u.EmailAddress, e =>
+            builder.OwnsOne<EmailAddress>("_email", e =>
             {
-                e.Property(ep => ep.Address)
-                    .IsRequired()
-                    .HasColumnName("EmailAddress")
-                    .HasMaxLength(255);
+                e.Property(eb => eb.Address).HasColumnName("EmailAddress");
             });
-                
-            builder.Property(u => u.NickName)
-                .HasMaxLength(255);
+
+            builder.OwnsMany<UserRole>("_roles", b =>
+            {
+                b.WithOwner().HasForeignKey("UserId");
+                b.ToTable("UserRoles", "users");
+                b.Property<UserId>("UserId");
+                b.Property<string>("Value").HasColumnName("RoleCode");
+                b.HasKey("UserId", "Value");
+            });
         }
     }
 }

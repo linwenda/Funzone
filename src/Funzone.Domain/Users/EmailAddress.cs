@@ -3,7 +3,7 @@ using Funzone.Domain.SeedWork;
 
 namespace Funzone.Domain.Users
 {
-    public class EmailAddress : ValueObject
+    public record EmailAddress
     {
         public string Address { get; }
 

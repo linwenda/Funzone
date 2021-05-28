@@ -26,8 +26,8 @@ namespace Funzone.Application.Users.Commands
             var user = User.RegisterByEmail(
                 _userChecker,
                 new EmailAddress(request.EmailAddress),
-                passwordSalt,
-                passwordHash);
+                passwordHash,
+                passwordSalt);
 
             await _userRepository.AddAsync(user);
             return await _userRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
