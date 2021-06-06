@@ -30,7 +30,8 @@ namespace Funzone.Application.Users.Commands
                 passwordSalt);
 
             await _userRepository.AddAsync(user);
-            return await _userRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+            return true;
         }
     }
 }

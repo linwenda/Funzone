@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Funzone.Application.Configuration.Data;
 using Funzone.Domain.SeedWork;
-using Funzone.Domain.SeedWork.EventSourcing;
 using Funzone.Infrastructure.Serialization;
 using Newtonsoft.Json;
 using SqlStreamStore;
@@ -12,7 +11,7 @@ using SqlStreamStore.Streams;
 
 namespace Funzone.Infrastructure.DataAccess.EventSourcing
 {
-    public class SqlStreamAggregateStore : IEventSourcedAggregateStore
+    public class SqlStreamAggregateStore : IAggregateStore
     {
         private readonly IStreamStore _streamStore;
 
@@ -44,8 +43,8 @@ namespace Funzone.Infrastructure.DataAccess.EventSourcing
             _aggregatesToSave.Clear();
         }
 
-        public async Task<T> Load<T>(EventSourcedAggregateId<T> aggregateId)
-            where T : EventSourcedAggregateRoot
+        public async Task<T> Load<T>(AggregateId<T> aggregateId)
+            where T : AggregateRoot
         {
             var streamId = GetStreamId(aggregateId);
 
@@ -88,7 +87,7 @@ namespace Funzone.Infrastructure.DataAccess.EventSourcing
         }
 
         public void AppendChanges<T>(T aggregate)
-            where T : EventSourcedAggregateRoot
+            where T : AggregateRoot
         {
             _aggregatesToSave.Add(new AggregateToSave(aggregate, CreateStreamMessages(aggregate).ToList()));
         }
@@ -100,20 +99,20 @@ namespace Funzone.Infrastructure.DataAccess.EventSourcing
 
         private class AggregateToSave
         {
-            public AggregateToSave(EventSourcedAggregateRoot aggregate, List<NewStreamMessage> messages)
+            public AggregateToSave(AggregateRoot aggregate, List<NewStreamMessage> messages)
             {
                 Aggregate = aggregate;
                 Messages = messages;
             }
 
-            public EventSourcedAggregateRoot Aggregate { get; }
+            public AggregateRoot Aggregate { get; }
 
             public List<NewStreamMessage> Messages { get; }
         }
 
         private NewStreamMessage[] CreateStreamMessages<T>(
             T aggregate)
-            where T : EventSourcedAggregateRoot
+            where T : AggregateRoot
         {
             List<NewStreamMessage> newStreamMessages = new List<NewStreamMessage>();
 
@@ -150,13 +149,13 @@ namespace Funzone.Infrastructure.DataAccess.EventSourcing
         }
 
         private static string GetStreamId<T>(T aggregate)
-            where T : EventSourcedAggregateRoot
+            where T : AggregateRoot
         {
             return $"{aggregate.GetType().Name}-{aggregate.Id:N}";
         }
 
-        private static string GetStreamId<T>(EventSourcedAggregateId<T> aggregateId)
-            where T : EventSourcedAggregateRoot
+        private static string GetStreamId<T>(AggregateId<T> aggregateId)
+            where T : AggregateRoot
             => $"{typeof(T).Name}-{aggregateId.Value:N}";
     }
 }

@@ -1,12 +1,11 @@
 ﻿using System;
 using Funzone.Domain.Pages.Events;
 using Funzone.Domain.SeedWork;
-using Funzone.Domain.SeedWork.EventSourcing;
 using Funzone.Domain.Users;
 
 namespace Funzone.Domain.Pages
 {
-    public class Page : EventSourcedAggregateRoot
+    public class Page : AggregateRoot
     {
         private UserId _authorId;
         private DateTime _createdTime;

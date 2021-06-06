@@ -4,7 +4,7 @@ namespace Funzone.Domain.Pages
 {
     public class PageDomainException : DomainException
     {
-        public PageDomainException(string message) : base(message)
+        public PageDomainException(string message) : base(ResponseCode.PageDomainException, message)
         {
         }
     }

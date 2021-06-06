@@ -4,7 +4,7 @@ namespace Funzone.Domain.Users
 {
     public class UserDomainException : DomainException
     {
-        public UserDomainException(string message) : base(message)
+        public UserDomainException(string message) : base(ResponseCode.UserDomainException, message)
         {
         }
     }

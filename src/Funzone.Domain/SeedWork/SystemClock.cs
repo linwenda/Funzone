@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Funzone.Domain.SharedKernel
+namespace Funzone.Domain.SeedWork
 {
     public static class SystemClock
     {

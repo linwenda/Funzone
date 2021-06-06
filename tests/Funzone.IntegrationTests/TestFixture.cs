@@ -7,7 +7,6 @@ using Funzone.Domain.SeedWork;
 using Funzone.Domain.Users;
 using Funzone.Infrastructure;
 using Funzone.Infrastructure.DataAccess;
-using Funzone.Infrastructure.DataAccess.EFCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

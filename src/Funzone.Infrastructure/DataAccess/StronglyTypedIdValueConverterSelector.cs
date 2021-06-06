@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Funzone.Domain.SeedWork;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Funzone.Infrastructure.DataAccess.EFCore
+namespace Funzone.Infrastructure.DataAccess
 {
     /// <summary>
     /// https://andrewlock.net/strongly-typed-ids-in-ef-core-using-strongly-typed-entity-ids-to-avoid-primitive-obsession-part-4/

@@ -1,5 +1,4 @@
 ﻿using Ardalis.GuardClauses;
-using Funzone.Domain.SeedWork;
 
 namespace Funzone.Domain.Users
 {
@@ -15,7 +14,7 @@ namespace Funzone.Domain.Users
                 + "@"
                 + @"((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))$");
 
-            this.Address = address;
+            Address = address;
         }
 
         public override string ToString()

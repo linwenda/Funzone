@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Funzone.Domain.SeedWork.EventSourcing
+namespace Funzone.Domain.SeedWork
 {
-    public abstract class EventSourcedAggregateRoot : IEventSourcedAggregateRoot
+    public abstract class AggregateRoot : IAggregateRoot
     {
         private readonly List<IDomainEvent> _domainEvents;
 
@@ -17,7 +17,7 @@ namespace Funzone.Domain.SeedWork.EventSourcing
             _domainEvents.Add(@event);
         }
 
-        protected EventSourcedAggregateRoot()
+        protected AggregateRoot()
         {
             _domainEvents = new List<IDomainEvent>();
 

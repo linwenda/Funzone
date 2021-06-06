@@ -4,15 +4,9 @@ namespace Funzone.Domain.SeedWork
 {
     public class DomainException : Exception
     {
-        public DomainException()
-        {
-        }
+        public ResponseCode Code { get; }
 
-        public DomainException(string message) : base(message)
-        {
-        }
-
-        public DomainException(string message, Exception innerException) : base(message, innerException)
+        public DomainException(ResponseCode code, string message) : base(message)
         {
         }
     }

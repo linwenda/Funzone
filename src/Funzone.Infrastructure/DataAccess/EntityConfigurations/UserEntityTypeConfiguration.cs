@@ -3,7 +3,7 @@ using Funzone.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Funzone.Infrastructure.DataAccess.EFCore.EntityConfigurations
+namespace Funzone.Infrastructure.DataAccess.EntityConfigurations
 {
     public class UserEntityTypeConfiguration: IEntityTypeConfiguration<User>
     {
