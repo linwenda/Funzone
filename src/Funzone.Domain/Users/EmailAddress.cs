@@ -1,19 +1,18 @@
 ﻿using Ardalis.GuardClauses;
+using Funzone.Domain.SeedWork;
 
 namespace Funzone.Domain.Users
 {
-    public record EmailAddress
+    public class EmailAddress : ValueObject
     {
         public string Address { get; }
 
         public EmailAddress(string address)
         {
-            Guard.Against.NullOrEmpty(address, nameof(EmailAddress));
-            Guard.Against.InvalidFormat(address, nameof(EmailAddress),
-                @"^[\w!#$%&'*+\-/=?\^_`{|}~]+(\.[\w!#$%&'*+\-/=?\^_`{|}~]+)*"
-                + "@"
-                + @"((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))$");
-
+            Guard.Against.NullOrEmpty(address, nameof(address));
+            Guard.Against.InvalidFormat(address, nameof(address),
+                @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|" + @"([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)" +
+                @"@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$");
             Address = address;
         }
 

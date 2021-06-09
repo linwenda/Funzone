@@ -1,12 +1,14 @@
-﻿namespace Funzone.Domain.Users
+﻿using Funzone.Domain.SeedWork;
+
+namespace Funzone.Domain.Users
 {
-    public record UserRole
+    public class UserRole : ValueObject
     {
         public static UserRole Guest => new UserRole(nameof(Guest));
         public static UserRole Subscriber => new UserRole(nameof(Subscriber));
         public static UserRole Administrator => new UserRole(nameof(Administrator));
 
-        public string Code { get; }
+        public string Code { get; private set; }
 
         private UserRole(string code)
         {

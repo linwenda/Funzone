@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Funzone.Application.Configuration.Responses;
+using MediatR;
 
 namespace Funzone.Application.Configuration.Queries
 {

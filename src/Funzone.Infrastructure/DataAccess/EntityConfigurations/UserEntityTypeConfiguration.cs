@@ -20,7 +20,7 @@ namespace Funzone.Infrastructure.DataAccess.EntityConfigurations
             builder.Property<string>("_nickName").HasColumnName("NickName");
             builder.Property<bool>("_isActive").HasColumnName("IsActive");
 
-            builder.OwnsOne<EmailAddress>("_email", e =>
+            builder.OwnsOne(p=>p.EmailAddress, e =>
             {
                 e.Property(eb => eb.Address).HasColumnName("EmailAddress");
             });

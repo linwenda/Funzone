@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="AggregateStore\**" />
+    <EmbeddedResource Remove="AggregateStore\**" />
+    <None Remove="AggregateStore\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Funzone.Application\Funzone.Application.csproj" />
   </ItemGroup>
 
@@ -17,11 +23,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.5" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
-    <PackageReference Include="SqlStreamStore.MsSql" Version="1.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="AggregateStore" />
   </ItemGroup>
 
 </Project>

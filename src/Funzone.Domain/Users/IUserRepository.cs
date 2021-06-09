@@ -1,14 +1,11 @@
 ﻿using System.Threading.Tasks;
-using Funzone.Domain.SeedWork;
 
 namespace Funzone.Domain.Users
 {
-    public interface IUserRepository : IRepository<User>
+    public interface IUserRepository
     {
         Task<User> GetByIdAsync(UserId userId);
         
         Task AddAsync(User user);
-
-        void Update(User user);
     }
 }

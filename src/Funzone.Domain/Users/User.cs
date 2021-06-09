@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Funzone.Domain.SeedWork;
 using Funzone.Domain.Users.Events;
 
@@ -8,37 +9,37 @@ namespace Funzone.Domain.Users
     {
         public UserId Id { get; private set; }
 
-        private DateTime _registrationTime;
-        private EmailAddress _emailAddress;
-        private string _passwordHash;
-        private string _passwordSalt;
-        private string _nickName;
-        private bool _isActive;
+        public DateTime RegistrationTime { get; private set; }
+        public EmailAddress EmailAddress { get; private set; }
+        public string PasswordHash { get; private set; }
+        public string PasswordSalt { get; private set; }
+        public string NickName { get; private set; }
+        public bool IsActive { get; private set; }
+
+        private readonly List<UserRole> _roles;
+        public IReadOnlyCollection<UserRole> Roles => _roles.AsReadOnly();
+
 
         private User()
         {
         }
 
         private User(
-            IUserChecker userChecker,
             EmailAddress emailAddress,
             string passwordHash,
             string passwordSalt)
         {
-            if (!userChecker.IsUnique(emailAddress))
-            {
-                throw new UserDomainException("User with this email already exists.");
-            }
-
             Id = new UserId(Guid.NewGuid());
 
-            _registrationTime = DateTime.UtcNow;
-            _emailAddress = emailAddress;
-            _passwordHash = passwordHash;
-            _passwordSalt = passwordSalt;
-            _isActive = true;
-            
-            AddDomainEvent(new UserRegisteredDomainEvent(Id,_emailAddress));
+            RegistrationTime = DateTime.UtcNow;
+            EmailAddress = emailAddress;
+            PasswordHash = passwordHash;
+            PasswordSalt = passwordSalt;
+            IsActive = true;
+
+            _roles.Add(UserRole.Guest);
+
+            AddDomainEvent(new UserRegisteredDomainEvent(Id, EmailAddress));
         }
 
         public static User RegisterByEmail(
@@ -47,16 +48,18 @@ namespace Funzone.Domain.Users
             string passwordHash,
             string passwordSalt)
         {
+            if (!userChecker.IsUnique(email)) throw new UserDomainException("User with this email already exists.");
+
+
             return new User(
-                userChecker,
-                email, 
-                passwordHash, 
+                email,
+                passwordHash,
                 passwordSalt);
         }
 
         public void EditProfile(string nickName)
         {
-            _nickName = nickName;
+            NickName = nickName;
         }
     }
 }

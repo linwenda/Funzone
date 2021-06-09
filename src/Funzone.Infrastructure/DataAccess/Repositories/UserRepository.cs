@@ -24,10 +24,5 @@ namespace Funzone.Infrastructure.DataAccess.Repositories
         {
             await _context.Set<User>().AddAsync(user);
         }
-
-        public void Update(User user)
-        {
-            _context.Entry(user).State = EntityState.Modified;
-        }
     }
 }
