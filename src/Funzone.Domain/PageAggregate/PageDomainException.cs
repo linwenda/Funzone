@@ -1,6 +1,6 @@
 ﻿using Funzone.Domain.SeedWork;
 
-namespace Funzone.Domain.Pages
+namespace Funzone.Domain.PageAggregate
 {
     public class PageDomainException : DomainException
     {

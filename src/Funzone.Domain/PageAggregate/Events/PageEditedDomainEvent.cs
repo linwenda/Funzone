@@ -1,21 +1,18 @@
 ﻿using Funzone.Domain.SeedWork;
 
-namespace Funzone.Domain.Pages.Events
+namespace Funzone.Domain.PageAggregate.Events
 {
     public class PageEditedDomainEvent : DomainEventBase
     {
         public string Title { get; }
-        public string Body { get; }
-        public string Status { get; }
+        public string Blocks { get; }
 
         public PageEditedDomainEvent(
             string title,
-            string body,
-            string status)
+            string blocks)
         {
             Title = title;
-            Body = body;
-            Status = status;
+            Blocks = blocks;
         }
     }
 }
