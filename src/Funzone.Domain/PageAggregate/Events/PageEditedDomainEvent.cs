@@ -1,15 +1,16 @@
-﻿using Funzone.Domain.SeedWork;
+﻿using System.Collections.Generic;
+using Funzone.Domain.SeedWork;
 
 namespace Funzone.Domain.PageAggregate.Events
 {
     public class PageEditedDomainEvent : DomainEventBase
     {
         public string Title { get; }
-        public string Blocks { get; }
+        public List<Block> Blocks { get; }
 
         public PageEditedDomainEvent(
             string title,
-            string blocks)
+            List<Block> blocks)
         {
             Title = title;
             Blocks = blocks;

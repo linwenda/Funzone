@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Funzone.Domain.PageAggregate.Events;
 using Funzone.Domain.SeedWork;
 using Funzone.Domain.Users;
@@ -12,7 +13,6 @@ namespace Funzone.Domain.PageAggregate
         private UserId _authorId;
         private DateTime _createdTime;
         private string _title;
-        private string _body;
         private PageStatus _status;
         private List<Block> _blocks;
 
@@ -21,7 +21,7 @@ namespace Funzone.Domain.PageAggregate
             _blocks = new List<Block>();
         }
 
-        public static Page Create(UserId authorId, string title, string body)
+        public static Page Create(UserId authorId, string title, List<Block> blocks)
         {
             var page = new Page();
 
@@ -30,7 +30,7 @@ namespace Funzone.Domain.PageAggregate
                 authorId.Value,
                 DateTime.UtcNow,
                 title,
-                body);
+                blocks);
 
             page.Apply(pageCreatedDomainEvent);
             page.AddDomainEvent(pageCreatedDomainEvent);
@@ -41,13 +41,13 @@ namespace Funzone.Domain.PageAggregate
         public void Edit(
             UserId editorId,
             string title, 
-            IEnumerable<Block> editedBlocks)
+            List<Block> editedBlocks)
         {
             CheckAuthor(editorId);
 
             var pageEditedDomainEvent = new PageEditedDomainEvent(
                 title,
-                JsonConvert.SerializeObject(editedBlocks));
+                editedBlocks);
 
             Apply(pageEditedDomainEvent);
             AddDomainEvent(pageEditedDomainEvent);
@@ -85,15 +85,27 @@ namespace Funzone.Domain.PageAggregate
             _authorId = new UserId(@event.AuthorId);
             _createdTime = @event.CreatedTime;
             _title = @event.Title;
-            _body = @event.Body;
+            _blocks = @event.Blocks;
             _status = PageStatus.Draft;
         }
 
         private void When(PageEditedDomainEvent @event)
         {
             _title = @event.Title;
-            _body = @event.Blocks;
             _status = PageStatus.Draft;
+
+            foreach (var editedBlock in @event.Blocks)
+            {
+                var block = _blocks.FirstOrDefault(b => b.Id == editedBlock.Id);
+                if (block != null)
+                {
+                    block.Edit(editedBlock.Text, editedBlock.IsRemoved);
+                }
+                else
+                {
+                    _blocks.Add(editedBlock);
+                }
+            }
         }
 
         private void When(PagePublishedDomainEvent @event)
